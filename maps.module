@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function maps_theme($existing, $type, $theme, $path)
+{
+    return array(
+        'maps' => array(
+            'variables' => array(
+                'width' => NULL,
+                'height' => NULL,
+            )
+        )
+    );
+}
+
+
+
+function maps_page_attachments(array &$attachments) {
+    $attachments['#attached']['library'][] = 'maps/maps-js';
+}

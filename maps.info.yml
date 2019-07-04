@@ -1,0 +1,13 @@
+name: 	Maps
+type: module
+description: Custom Google Maps Drupal 8
+package: Custom
+core: 8.x
+version: 8.x
+
+
+dependencies:
+  - block
+
+
+configure: maps.form

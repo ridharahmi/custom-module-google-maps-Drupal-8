@@ -1,0 +1,5 @@
+maps.form:
+  title: 'Google Maps'
+  description: 'This is custom google maps.'
+  parent: system.admin_config_ui
+  route_name: maps.form

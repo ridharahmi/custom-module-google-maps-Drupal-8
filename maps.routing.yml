@@ -1,0 +1,8 @@
+maps.form:
+  path: '/admin/config/user-interface/maps'
+  defaults:
+    _form: '\Drupal\maps\Form\MapsForm'
+    _title: ' Google Maps'
+  requirements:
+    _permission: 'access administration pages'
+
