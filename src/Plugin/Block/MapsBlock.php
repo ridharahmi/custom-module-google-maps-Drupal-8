@@ -97,11 +97,29 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
 
 
         $form['markers'] = [
-            '#type' => 'textarea',
+            '#type' => 'textfield',
             '#title' => $this->t('Markers'),
             '#placeholder' => "latitude,longitude|latitude,longitude",
             '#description' => $this->t('Use | to separate markers. <br> Use this link to get latitude and longitude <a target="_blank" href="https://www.latlong.net/">https://www.latlong.net/</a>'),
             '#default_value' => isset($config['markers']) ? $config['markers'] : '',
+        ];
+        $form['border'] = [
+            '#type' => 'number',
+            '#title' => $this->t('Border'),
+            '#description' => $this->t('PX border Maps'),
+            '#default_value' => isset($config['border']) ? $config['border'] : '',
+        ];
+        $form['color_border'] = [
+            '#type' => 'color',
+            '#title' => $this->t('Color Border'),
+            '#description' => $this->t('Color border maps'),
+            '#default_value' => isset($config['color_border']) ? $config['color_border'] : '',
+        ];
+        $form['padding_maps'] = [
+            '#type' => 'number',
+            '#title' => $this->t('Padding'),
+            '#description' => $this->t('Padding Maps'),
+            '#default_value' => isset($config['padding_maps']) ? $config['padding_maps'] : '',
         ];
 
 
@@ -118,7 +136,9 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
         $this->configuration['zoom_level'] = $values['zoom_level'];
         $this->configuration['center_position'] = $values['center_position'];
         $this->configuration['markers'] = $values['markers'];
-        $form_state->getValue('width');
+        $this->configuration['border'] = $values['border'];
+        $this->configuration['color_border'] = $values['color_border'];
+        $this->configuration['padding_maps'] = $values['padding_maps'];
     }
 
 }

@@ -1,4 +1,4 @@
-maps-js:
+maps_style:
   version: 1.x
   js:
     js/custom.js: {}

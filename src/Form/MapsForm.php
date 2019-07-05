@@ -37,7 +37,7 @@ class MapsForm extends ConfigFormBase
             '#type' => 'textfield',
             '#title' => $this->t('Maps key'),
             '#default_value' => $config->get('maps_key'),
-            '#description' => $this->t('Add google maps  <a href="https://console.developers.google.com" target="_blanc">free API key</a>'),
+            '#description' => $this->t('Add google maps  <a href="https://console.developers.google.com" target="_blanc">Free API Key</a>'),
             '#size' => 60,
         );
 

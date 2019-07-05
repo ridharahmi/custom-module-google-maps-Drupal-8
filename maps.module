@@ -16,7 +16,8 @@ function maps_theme($existing, $type, $theme, $path)
 }
 
 
-
-function maps_page_attachments(array &$attachments) {
-    $attachments['#attached']['library'][] = 'maps/maps-js';
+function maps_page_attachments(array &$attachments)
+{
+    $attachments['#attached']['library'][] = 'maps/maps_style';
 }
+

@@ -9,7 +9,7 @@
             var center_long = center_position[1];
             var markers = settings.markers.split("|");
 
-            $.getScript('https://maps.googleapis.com/maps/api/js?key='+google_api_key,function () {
+            $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyAw1Wg-f_QsyBl2SexlIGaLhwhIlMM8X9s&callback=initMap',function () {
 
                 var myCenter = new google.maps.LatLng(center_lat,center_long);
                 var mapCanvas = document.getElementById("maps");
