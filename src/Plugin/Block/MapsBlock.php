@@ -27,9 +27,16 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
         return [
             'width' => $default_config->get('width'),
             'height' => $default_config->get('height'),
+            'border' => $default_config->get('border'),
+            'color_border' => $default_config->get('color_border'),
+            'padding_maps' => $default_config->get('padding_maps'),
             'zoom_level' => $default_config->get('zoom_level'),
             'center_position' => $default_config->get('center_position'),
-            'markers' => $default_config->get('markers'),
+            'logo_marker' => $default_config->get('logo_marker'),
+            'title_marker' => $default_config->get('logo_marker'),
+            'description_marker' => $default_config->get('logo_marker'),
+            'position_marker' => $default_config->get('logo_marker'),
+            'border_radius' => $default_config->get('logo_marker'),
             'maps_key' => $default_config->get('maps_key'),
         ];
 
@@ -46,12 +53,21 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
             '#theme' => 'maps',
             '#width' => $config['width'],
             '#height' => $config['height'],
+            '#border' => $config['border'],
+            '#color_border' => $config['color_border'],
+            '#padding_maps' => $config['padding_maps'],
+            '#border_radius' => $config['border_radius'],
             '#attached' => array(
-
+                'library' => array(
+                    'maps/maps_style',
+                ),
                 'drupalSettings' => [
                     'zoom' => $config['zoom_level'],
                     'center' => $config['center_position'],
-                    'markers' => $config['markers'],
+                    'logo_marker' => $config['logo_marker'],
+                    'title_marker' => $config['title_marker'],
+                    'description_marker' => $config['description_marker'],
+                    'position_marker' => $config['position_marker'],
                     'maps_key' => $config['maps_key'],
                 ]
             ),
@@ -71,55 +87,79 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
             '#title' => $this->t('Width'),
             '#description' => $this->t('Width of your map '),
             '#default_value' => isset($config['width']) ? $config['width'] : '',
-            '#size' => 8
         ];
         $form['height'] = [
             '#type' => 'textfield',
             '#title' => $this->t('Height'),
             '#description' => $this->t('Height of google your map '),
             '#default_value' => isset($config['height']) ? $config['height'] : '',
-            '#size' => 8
         ];
         $form['zoom_level'] = [
-            '#type' => 'number',
+            '#type' => 'textfield',
             '#title' => $this->t('Map Zoom Level'),
             '#default_value' => isset($config['zoom_level']) ? $config['zoom_level'] : '',
-            '#size' => 8
         ];
 
         $form['center_position'] = [
             '#type' => 'textfield',
-            '#title' => $this->t('Center Position'),
+            '#title' => $this->t('Position'),
             '#placeholder' => "latitude,longitude",
             '#description' => $this->t('Use this link to get latitude and longitude <a target="_blank" href="https://www.latlong.net/">https://www.latlong.net/</a>'),
             '#default_value' => isset($config['center_position']) ? $config['center_position'] : '',
         ];
-
-
-        $form['markers'] = [
+        $form['title_marker'] = [
             '#type' => 'textfield',
-            '#title' => $this->t('Markers'),
-            '#placeholder' => "latitude,longitude|latitude,longitude",
-            '#description' => $this->t('Use | to separate markers. <br> Use this link to get latitude and longitude <a target="_blank" href="https://www.latlong.net/">https://www.latlong.net/</a>'),
-            '#default_value' => isset($config['markers']) ? $config['markers'] : '',
+            '#title' => $this->t('Title Marker'),
+            '#description' => $this->t('This Is Label Marker'),
+            '#default_value' => isset($config['title_marker']) ? $config['title_marker'] : '',
+        ];
+        $form['description_marker'] = [
+            '#type' => 'textfield',
+            '#title' => $this->t('Description Marker'),
+            '#description' => $this->t('This Is Description Marker'),
+            '#default_value' => isset($config['description_marker']) ? $config['description_marker'] : '',
+        ];
+        $form['logo_marker'] = [
+            '#type' => 'file',
+            '#title' => $this->t('Logo Marker'),
+            '#description' => $this->t('Logo Marker: Image png, jpg'),
+            '#default_value' => isset($config['logo_marker']) ? $config['logo_marker'] : '',
+        ];
+        $form['position_marker'] = [
+            '#type' => 'textfield',
+            '#title' => $this->t('Position Marker'),
+            '#placeholder' => "latitude,longitude",
+            '#description' => $this->t('Use this link to get latitude and longitude <a target="_blank" href="https://www.latlong.net/">https://www.latlong.net/</a>'),
+            '#default_value' => isset($config['position_marker']) ? $config['position_marker'] : '',
         ];
         $form['border'] = [
-            '#type' => 'number',
+            '#type' => 'textfield',
             '#title' => $this->t('Border'),
             '#description' => $this->t('PX border Maps'),
             '#default_value' => isset($config['border']) ? $config['border'] : '',
+            '#size' => 20
+        ];
+
+        $form['border_radius'] = [
+            '#type' => 'textfield',
+            '#title' => $this->t('Border Radius'),
+            '#description' => $this->t('PX Border Radius  Maps'),
+            '#default_value' => isset($config['border_radius']) ? $config['border_radius'] : '',
+            '#size' => 20
         ];
         $form['color_border'] = [
             '#type' => 'color',
             '#title' => $this->t('Color Border'),
             '#description' => $this->t('Color border maps'),
             '#default_value' => isset($config['color_border']) ? $config['color_border'] : '',
+
         ];
         $form['padding_maps'] = [
-            '#type' => 'number',
+            '#type' => 'textfield',
             '#title' => $this->t('Padding'),
             '#description' => $this->t('Padding Maps'),
             '#default_value' => isset($config['padding_maps']) ? $config['padding_maps'] : '',
+            '#size' => 20
         ];
 
 
@@ -135,7 +175,11 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
         $this->configuration['height'] = $values['height'];
         $this->configuration['zoom_level'] = $values['zoom_level'];
         $this->configuration['center_position'] = $values['center_position'];
-        $this->configuration['markers'] = $values['markers'];
+        $this->configuration['logo_marker'] = $values['logo_marker'];
+        $this->configuration['title_marker'] = $values['title_marker'];
+        $this->configuration['description_marker'] = $values['description_marker'];
+        $this->configuration['position_marker'] = $values['position_marker'];
+        $this->configuration['border_radius'] = $values['border_radius'];
         $this->configuration['border'] = $values['border'];
         $this->configuration['color_border'] = $values['color_border'];
         $this->configuration['padding_maps'] = $values['padding_maps'];

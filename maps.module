@@ -10,14 +10,24 @@ function maps_theme($existing, $type, $theme, $path)
             'variables' => array(
                 'width' => NULL,
                 'height' => NULL,
+                'border' => NULL,
+                'border_radius' => NULL,
+                'color_border' => NULL,
+                'padding_maps' => NULL,
             )
         )
     );
 }
 
 
-function maps_page_attachments(array &$attachments)
-{
-    $attachments['#attached']['library'][] = 'maps/maps_style';
-}
+//function maps_page_attachments(array &$attachments)
+//{
+//    $attachments['#attached']['library'][] = 'maps/maps_style';
+//}
+//
+
+
+
+
+
 
