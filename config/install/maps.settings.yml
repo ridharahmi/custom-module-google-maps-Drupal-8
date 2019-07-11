@@ -1,11 +1,14 @@
 width: 100%
 height: '400px'
-zoom_level: 10
-center_position: '35.777155, 10.82234'
+zoom_level: 7
+center_position: '33.9956406,8.4261179'
+animate_marker_position: 2
 logo_marker: '../images/logo.png'
+size_logo: 50
 title_marker : 'Title Marker'
 description_marker : 'Description Marker'
-position_marker: '35.777155, 10.82234'
+position_marker: '33.9956406,8.4261179'
+animate_marker: 3
 border_radius: '10px'
 border: '1px solid'
 color_border: '#dddddd'

@@ -5,6 +5,8 @@ namespace Drupal\maps\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\file\Entity\File;
+
 
 /**
  * Provides a 'Hello' Block.
@@ -30,13 +32,16 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
             'border' => $default_config->get('border'),
             'color_border' => $default_config->get('color_border'),
             'padding_maps' => $default_config->get('padding_maps'),
+            'border_radius' => $default_config->get('border_radius'),
             'zoom_level' => $default_config->get('zoom_level'),
             'center_position' => $default_config->get('center_position'),
+            'animate_marker_position' => $default_config->get('animate_marker_position'),
             'logo_marker' => $default_config->get('logo_marker'),
-            'title_marker' => $default_config->get('logo_marker'),
-            'description_marker' => $default_config->get('logo_marker'),
-            'position_marker' => $default_config->get('logo_marker'),
-            'border_radius' => $default_config->get('logo_marker'),
+            'size_logo' => $default_config->get('size_logo'),
+            'title_marker' => $default_config->get('title_marker'),
+            'description_marker' => $default_config->get('description_marker'),
+            'position_marker' => $default_config->get('position_marker'),
+            'animate_marker' => $default_config->get('animate_marker'),
             'maps_key' => $default_config->get('maps_key'),
         ];
 
@@ -48,6 +53,8 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
     public function build()
     {
         $config = $this->getConfiguration();
+        $file = File::load($config['logo_marker'][0]);
+        $image = $file->getFileUri();
 
         return array(
             '#theme' => 'maps',
@@ -64,21 +71,27 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
                 'drupalSettings' => [
                     'zoom' => $config['zoom_level'],
                     'center' => $config['center_position'],
-                    'logo_marker' => $config['logo_marker'],
+                    'animate_marker_position' => $config['animate_marker_position'],
+                    'logo_marker' => $image,
+                    'size_logo' => $config['size_logo'],
                     'title_marker' => $config['title_marker'],
                     'description_marker' => $config['description_marker'],
                     'position_marker' => $config['position_marker'],
+                    'animate_marker' => $config['animate_marker'],
                     'maps_key' => $config['maps_key'],
                 ]
             ),
         );
+
+
     }
 
 
     /**
      * {@inheritdoc}
      */
-    public function blockForm($form, FormStateInterface $form_state)
+    public
+    function blockForm($form, FormStateInterface $form_state)
     {
         $form = parent::blockForm($form, $form_state);
         $config = $this->getConfiguration();
@@ -107,6 +120,17 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
             '#description' => $this->t('Use this link to get latitude and longitude <a target="_blank" href="https://www.latlong.net/">https://www.latlong.net/</a>'),
             '#default_value' => isset($config['center_position']) ? $config['center_position'] : '',
         ];
+        $form['animate_marker_position'] = array(
+            '#type' => 'select',
+            '#title' => $this->t('Animate Marker Position'),
+            '#description' => $this->t('This Is Animate Marker Position: Bounce|Drop'),
+            '#options' => array(
+                1 => $this->t('None'),
+                2 => $this->t('Bounce'),
+                3 => $this->t('Drop'),
+            ),
+            '#default_value' => isset($config['animate_marker_position']) ? $config['animate_marker_position'] : '',
+        );
         $form['title_marker'] = [
             '#type' => 'textfield',
             '#title' => $this->t('Title Marker'),
@@ -119,11 +143,30 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
             '#description' => $this->t('This Is Description Marker'),
             '#default_value' => isset($config['description_marker']) ? $config['description_marker'] : '',
         ];
-        $form['logo_marker'] = [
-            '#type' => 'file',
+
+        $form['logo_marker'] = array(
+            '#type' => 'managed_file',
+            '#upload_location' => 'public://images/',
             '#title' => $this->t('Logo Marker'),
-            '#description' => $this->t('Logo Marker: Image png, jpg'),
+            '#multiple' => FALSE,
+            '#description' => t("Logo Marker: Image png, jpg"),
             '#default_value' => isset($config['logo_marker']) ? $config['logo_marker'] : '',
+            '#upload_validators' => array(
+                'file_validate_extensions' => array('gif png jpg jpeg'),
+                'file_validate_size' => array(25600000),
+            ),
+            '#states' => array(
+                'visible' => array(
+                    ':input[name="image_type"]' => array('value' => t('Upload New Image(s)')),
+                )
+            )
+        );
+        $form['size_logo'] = [
+            '#type' => 'textfield',
+            '#title' => $this->t('Size Logo Marker'),
+            '#description' => $this->t('This Is Size Logo Marker Exp: 50'),
+            '#default_value' => isset($config['size_logo']) ? $config['size_logo'] : '',
+            '#size' => 20
         ];
         $form['position_marker'] = [
             '#type' => 'textfield',
@@ -132,6 +175,17 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
             '#description' => $this->t('Use this link to get latitude and longitude <a target="_blank" href="https://www.latlong.net/">https://www.latlong.net/</a>'),
             '#default_value' => isset($config['position_marker']) ? $config['position_marker'] : '',
         ];
+        $form['animate_marker'] = array(
+            '#type' => 'select',
+            '#title' => $this->t('Animate Marker'),
+            '#description' => $this->t('This Is Animate Marker: Bounce|Drop'),
+            '#options' => array(
+                1 => $this->t('None'),
+                2 => $this->t('Bounce'),
+                3 => $this->t('Drop'),
+            ),
+            '#default_value' => isset($config['animate_marker']) ? $config['animate_marker'] : '',
+        );
         $form['border'] = [
             '#type' => 'textfield',
             '#title' => $this->t('Border'),
@@ -167,7 +221,8 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
     }
 
 
-    public function blockSubmit($form, FormStateInterface $form_state)
+    public
+    function blockSubmit($form, FormStateInterface $form_state)
     {
         parent::blockSubmit($form, $form_state);
         $values = $form_state->getValues();
@@ -175,14 +230,21 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
         $this->configuration['height'] = $values['height'];
         $this->configuration['zoom_level'] = $values['zoom_level'];
         $this->configuration['center_position'] = $values['center_position'];
+        $this->configuration['animate_marker_position'] = $values['animate_marker_position'];
         $this->configuration['logo_marker'] = $values['logo_marker'];
+        $this->configuration['size_logo'] = $values['size_logo'];
         $this->configuration['title_marker'] = $values['title_marker'];
         $this->configuration['description_marker'] = $values['description_marker'];
         $this->configuration['position_marker'] = $values['position_marker'];
+        $this->configuration['animate_marker'] = $values['animate_marker'];
         $this->configuration['border_radius'] = $values['border_radius'];
         $this->configuration['border'] = $values['border'];
         $this->configuration['color_border'] = $values['color_border'];
         $this->configuration['padding_maps'] = $values['padding_maps'];
+        //dsm($values);
+
+
     }
+
 
 }
