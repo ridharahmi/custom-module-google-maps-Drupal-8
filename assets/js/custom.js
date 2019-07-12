@@ -20,15 +20,13 @@
             //var animate_marker_position = e.options[e.selectedIndex];
             var animate_marker_position = drupalSettings.animate_marker_position;
             var animate_marker = settings.animate_marker;
-            //var logo = drupalSettings.logo;
-            //console.log(logo_marker);
 
             $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyAxsYM8uLOZvdqjYpQINzzvYKcVkT57p58&callback=initMap', function () {
 
                 var myCenter = new google.maps.LatLng(center_lat, center_long);
                 var marker;
                 var cat = [
-                    [title_marker, description_marker, lat_marker, long_marker, '/drupal8613/sites/default/files/'+logo],
+                    [title_marker, description_marker, lat_marker, long_marker, logo],
                 ];
 
 

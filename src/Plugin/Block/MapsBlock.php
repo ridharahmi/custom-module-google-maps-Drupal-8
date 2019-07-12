@@ -36,7 +36,6 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
             'zoom_level' => $default_config->get('zoom_level'),
             'center_position' => $default_config->get('center_position'),
             'animate_marker_position' => $default_config->get('animate_marker_position'),
-            'logo_marker' => $default_config->get('logo_marker'),
             'size_logo' => $default_config->get('size_logo'),
             'title_marker' => $default_config->get('title_marker'),
             'description_marker' => $default_config->get('description_marker'),
@@ -53,8 +52,13 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
     public function build()
     {
         $config = $this->getConfiguration();
-        $file = File::load($config['logo_marker'][0]);
-        $image = $file->getFileUri();
+        if(File::load($config['logo_marker'][0])){
+            $file = File::load($config['logo_marker'][0]);
+            $image = '/drupal8613/sites/default/files/'.$file->getFileUri();
+        }else{
+            $image = drupal_get_path('module', 'maps') . '/assets/image/logo.png';
+        }
+
 
         return array(
             '#theme' => 'maps',

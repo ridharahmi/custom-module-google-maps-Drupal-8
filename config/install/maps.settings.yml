@@ -3,7 +3,6 @@ height: '400px'
 zoom_level: 7
 center_position: '33.9956406,8.4261179'
 animate_marker_position: 2
-logo_marker: '../images/logo.png'
 size_logo: 50
 title_marker : 'Title Marker'
 description_marker : 'Description Marker'
