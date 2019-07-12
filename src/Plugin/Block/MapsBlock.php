@@ -255,7 +255,7 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
         $this->configuration['border'] = $values['border'];
         $this->configuration['color_border'] = $values['color_border'];
         $this->configuration['padding_maps'] = $values['padding_maps'];
-        //dsm($values);
+        //dsm($values['enable_marker']);
 
 
     }

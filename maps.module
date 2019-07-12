@@ -24,6 +24,4 @@ function maps_preprocess_page(&$variables)
 {
     $config = \Drupal::config('maps.settings');
     $variables['#attached']['drupalSettings']['maps_key'] = $config->get('maps_key');
-
-
 }
