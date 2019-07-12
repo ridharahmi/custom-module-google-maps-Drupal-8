@@ -16,7 +16,8 @@
             var logo_marker = settings.logo_marker;
             var logo = logo_marker.replace(/public:/g, '');
             var enable_marker = settings.enable_marker;
-            var animate_marker_position = drupalSettings.animate_marker_position;
+            var animate_marker_position = settings.animate_marker_position;
+            var animate_marker = settings.animate_marker;
 
             $.getScript('https://maps.googleapis.com/maps/api/js?key=' + maps_key + '&callback=initMap', function () {
                     //AIzaSyAxsYM8uLOZvdqjYpQINzzvYKcVkT57p58
@@ -34,24 +35,22 @@
                             mapTypeId: google.maps.MapTypeId.ROADMAP
                         };
 
-                        //alert(animate_marker_position);
-                        if (animate_marker_position === 1) {
-                            var google_animate = 'none';
-                        }
-                        else if (animate_marker_position === 2) {
+                        if (animate_marker_position == 2) {
                             var google_animate = google.maps.Animation.BOUNCE;
                         }
-                        else if (animate_marker_position === 3) {
+                        else if (animate_marker_position == 3) {
                             var google_animate = google.maps.Animation.DROP;
+                        } else {
+                            var google_animate = ' ';
                         }
-                        // alert(animate_marker_position);
+
                         var map = new google.maps.Map(document.getElementById("maps"), mapProp);
                         if (enable_marker === 1) {
                             setMarkers(map, cat);
                         }
                         var marker = new google.maps.Marker({
                             position: myCenter,
-                            animation: google.maps.Animation.DROP
+                            animation: google_animate
                         });
 
                         marker.setMap(map);
@@ -66,13 +65,22 @@
                                 anchor: new google.maps.Point(17, 34),
                                 scaledSize: new google.maps.Size(size_logo, size_logo)
                             };
+                            if (animate_marker == 2) {
+                                var animate_markers = google.maps.Animation.BOUNCE;
+                            }
+                            else if (animate_marker == 3) {
+                                var animate_markers = google.maps.Animation.DROP;
+                            } else {
+                                var animate_markers = ' ';
+                            }
+
                             var myLatLng = new google.maps.LatLng(villes[2], villes[3]);
                             var infoWindow = new google.maps.InfoWindow();
                             var marker = new google.maps.Marker({
                                 position: myLatLng,
                                 map: map,
                                 icon: image,
-                                animation: google.maps.Animation.DROP
+                                animation: animate_markers
                             });
                             (function (i) {
                                 google.maps.event.addListener(marker, "click", function () {
