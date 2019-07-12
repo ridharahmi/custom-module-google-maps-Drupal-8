@@ -20,29 +20,10 @@ function maps_theme($existing, $type, $theme, $path)
 }
 
 
-//function maps_page_attachments(array &$attachments)
-//{
-//    $attachments['#attached']['library'][] = 'maps/maps_style';
-//}
-//
-
-
-
-
-function maps_preprocess_html(&$variables) {
-    $config = \Drupal::config('maps.settings');
-    //Add a JS library
-    $variables['#attached']['library'][] = 'maps/maps_style';
-    $variables['#attached']['drupalSettings']['animate_position'] = $config->get('animate_marker_position');
-}
-
 function maps_preprocess_page(&$variables)
 {
     $config = \Drupal::config('maps.settings');
-    $fileimage = $config->get('logo_marker');
-    //$variables['#attached']['drupalSettings']['logo'] = '/drupal8613/sites/default/files/images/logo_0.png';
-    //$variables['logo_path'] = file_url_transform_relative(file_create_url(theme_get_setting('logo.url')));
-    $variables['#attached']['drupalSettings']['logo'] =  file_url_transform_relative(file_create_url(theme_get_setting('logo.url')));
+    $variables['#attached']['drupalSettings']['maps_key'] = $config->get('maps_key');
 
 
 }

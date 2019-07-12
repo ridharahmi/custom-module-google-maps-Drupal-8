@@ -2,7 +2,7 @@
     Drupal.behaviors.maps = {
         attach: function (context, settings) {
 
-            var maps_key = settings.maps_key;
+            var maps_key = drupalSettings.maps_key;
             var zoom = settings.zoom;
             var center_position = settings.center.split(",");
             var center_lat = center_position[0];
@@ -21,7 +21,7 @@
             var animate_marker_position = drupalSettings.animate_marker_position;
             var animate_marker = settings.animate_marker;
 
-            $.getScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyAxsYM8uLOZvdqjYpQINzzvYKcVkT57p58&callback=initMap', function () {
+            $.getScript('https://maps.googleapis.com/maps/api/js?key='+ maps_key +'&callback=initMap', function () {
 
                 var myCenter = new google.maps.LatLng(center_lat, center_long);
                 var marker;

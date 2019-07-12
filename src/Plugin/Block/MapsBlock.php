@@ -36,12 +36,12 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
             'zoom_level' => $default_config->get('zoom_level'),
             'center_position' => $default_config->get('center_position'),
             'animate_marker_position' => $default_config->get('animate_marker_position'),
+            'enable_marker' => $default_config->get('enable_marker'),
             'size_logo' => $default_config->get('size_logo'),
             'title_marker' => $default_config->get('title_marker'),
             'description_marker' => $default_config->get('description_marker'),
             'position_marker' => $default_config->get('position_marker'),
             'animate_marker' => $default_config->get('animate_marker'),
-            'maps_key' => $default_config->get('maps_key'),
         ];
 
     }
@@ -52,10 +52,11 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
     public function build()
     {
         $config = $this->getConfiguration();
-        if(File::load($config['logo_marker'][0])){
+
+        if (File::load($config['logo_marker'][0])) {
             $file = File::load($config['logo_marker'][0]);
-            $image = '/drupal8613/sites/default/files/'.$file->getFileUri();
-        }else{
+            $image = '/drupal8613/sites/default/files/' . $file->getFileUri();
+        } else {
             $image = drupal_get_path('module', 'maps') . '/assets/image/logo.png';
         }
 
@@ -76,6 +77,7 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
                     'zoom' => $config['zoom_level'],
                     'center' => $config['center_position'],
                     'animate_marker_position' => $config['animate_marker_position'],
+                    'enable_marker' => $config['enable_marker'],
                     'logo_marker' => $image,
                     'size_logo' => $config['size_logo'],
                     'title_marker' => $config['title_marker'],
@@ -135,19 +137,12 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
             ),
             '#default_value' => isset($config['animate_marker_position']) ? $config['animate_marker_position'] : '',
         );
-        $form['title_marker'] = [
-            '#type' => 'textfield',
-            '#title' => $this->t('Title Marker'),
-            '#description' => $this->t('This Is Label Marker'),
-            '#default_value' => isset($config['title_marker']) ? $config['title_marker'] : '',
-        ];
-        $form['description_marker'] = [
-            '#type' => 'textfield',
-            '#title' => $this->t('Description Marker'),
-            '#description' => $this->t('This Is Description Marker'),
-            '#default_value' => isset($config['description_marker']) ? $config['description_marker'] : '',
-        ];
-
+        $form['enable_marker'] = array(
+            '#type' => 'checkbox',
+            '#title' => $this->t('Enable Marker Maps'),
+            '#description' => $this->t('Enable Marker Maps: Position Marker|Logo Marker'),
+            '#default_value' => isset($config['enable_marker']) ? $config['enable_marker'] : '',
+        );
         $form['logo_marker'] = array(
             '#type' => 'managed_file',
             '#upload_location' => 'public://images/',
@@ -179,6 +174,20 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
             '#description' => $this->t('Use this link to get latitude and longitude <a target="_blank" href="https://www.latlong.net/">https://www.latlong.net/</a>'),
             '#default_value' => isset($config['position_marker']) ? $config['position_marker'] : '',
         ];
+        $form['title_marker'] = [
+            '#type' => 'textfield',
+            '#title' => $this->t('Title Marker'),
+            '#description' => $this->t('This Is Label Marker'),
+            '#default_value' => isset($config['title_marker']) ? $config['title_marker'] : '',
+        ];
+        $form['description_marker'] = [
+            '#type' => 'textfield',
+            '#title' => $this->t('Description Marker'),
+            '#description' => $this->t('This Is Description Marker'),
+            '#default_value' => isset($config['description_marker']) ? $config['description_marker'] : '',
+        ];
+
+
         $form['animate_marker'] = array(
             '#type' => 'select',
             '#title' => $this->t('Animate Marker'),
@@ -235,6 +244,7 @@ class MapsBlock extends BlockBase implements BlockPluginInterface
         $this->configuration['zoom_level'] = $values['zoom_level'];
         $this->configuration['center_position'] = $values['center_position'];
         $this->configuration['animate_marker_position'] = $values['animate_marker_position'];
+        $this->configuration['enable_marker'] = $values['enable_marker'];
         $this->configuration['logo_marker'] = $values['logo_marker'];
         $this->configuration['size_logo'] = $values['size_logo'];
         $this->configuration['title_marker'] = $values['title_marker'];
