@@ -35,23 +35,41 @@
                             mapTypeId: google.maps.MapTypeId.ROADMAP
                         };
 
-                        if (animate_marker_position == 2) {
-                            var google_animate = google.maps.Animation.BOUNCE;
-                        }
-                        else if (animate_marker_position == 3) {
-                            var google_animate = google.maps.Animation.DROP;
-                        } else {
-                            var google_animate = ' ';
-                        }
+                        // if (animate_marker_position == 2) {
+                        //     var google_animate = google.maps.Animation.BOUNCE;
+                        // }
+                        // else if (animate_marker_position == 3) {
+                        //     var google_animate = google.maps.Animation.DROP;
+                        // } else {
+                        //     var google_animate = marker.bounce(false);
+                        // }
 
                         var map = new google.maps.Map(document.getElementById("maps"), mapProp);
                         if (enable_marker === 1) {
                             setMarkers(map, cat);
                         }
-                        var marker = new google.maps.Marker({
-                            position: myCenter,
-                            animation: google_animate
-                        });
+                        if (animate_marker_position == 2) {
+                            var marker = new google.maps.Marker({
+                                position: myCenter,
+                                animation: google.maps.Animation.BOUNCE
+                            });
+                        }
+                        else if (animate_marker_position == 3) {
+                            var marker = new google.maps.Marker({
+                                position: myCenter,
+                                animation: google.maps.Animation.DROP
+                            });
+                        } else {
+                            var marker = new google.maps.Marker({
+                                position: myCenter,
+                                animation: marker.setAnimation(null)
+                            });
+                        }
+
+                        // var marker = new google.maps.Marker({
+                        //     position: myCenter,
+                        //     animation: google_animate
+                        // });
 
                         marker.setMap(map);
                     }
